@@ -35,7 +35,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.get('#firstName').type('Reeder')
         cy.get('#lastName').type('OT')
         cy.get('#email').type('reeder.o.t@teste.com')
-        cy.get('#phone-checkbox').click()
+        cy.get('#phone-checkbox').check()
         cy.get('#open-text-area').type('Teste')
         cy.contains('button', 'Enviar').click()
         cy.get('.error').should('be.visible')
@@ -82,6 +82,61 @@ describe('Central de Atendimento ao Cliente TAT', function() {
 
     })
 
+    it('seleciona um produto (YouTube) por seu texto', function(){
+      cy.get('#product')
+        .select('YouTube')
+        .should('have.value', 'youtube')
+    })
+
+    it('seleciona um produto (Mentoria) por seu valor (value)', function(){
+      cy.get('#product')
+        .select('mentoria')
+        .should('have.value', 'mentoria')
       
-       
+    })
+
+    it('seleciona um produto (Blog) por seu índice', function(){
+      cy.get('#product')
+        .select(1)
+        .should('have.value', 'blog')
+    })
+
+    it('marca o tipo de atendimento "Feedback"', function(){
+      cy.get('input[type="radio"][value="feedback"]')
+        .check()
+        .should('have.value', 'feedback')
+
+    })
+
+    it('marca cada tipo de atendimento', function(){
+      cy.get('input[type="radio"]')
+        .should('have.length', 3)
+        .each(function($radio){
+          cy.wrap($radio).check()
+          cy.wrap($radio).should('be.checked')
+        })
+
+        })
+
+    it('marca ambos checkboxes, depois desmarca o último', function(){
+      cy.get('input[type="checkbox"')
+        .check()
+        .should('be.checked')
+        .last()
+        .uncheck()
+        .should('not.be.checked')
+    })
+
+    it.only('seleciona um arquivo da pasta fixtures', function(){
+      cy.get('input[type="file"]')
+        .should('not.have.value')
+        .selectFile('./cypress/fixtures/example.json')
+        .should(function($input){
+          expect($input[0].files[0].name).to.equal('example.json')
+          
+        })
+
+    })
+
+    
 })
